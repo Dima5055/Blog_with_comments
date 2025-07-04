@@ -1,0 +1,40 @@
+<header>
+    <nav class="navbar navbar-light" style="background-color: lightskyblue">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('app_main') }}">
+                <img src="{{ asset('images/logo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+                Блогикум
+            </a>
+            {% set current_route = app.request.attributes.get('_route') %}
+                <ul class="nav  nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link {% if current_route == 'pages_about' %}active{% endif %}" href="{{ path('pages_about') }}">
+                            О проекте
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if current_route == 'pages_rules' %}active{% endif %}" href="{{ path('pages_rules') }}">
+                            Правила
+                        </a>
+                    </li>
+                    {% if app.user %}
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+{#                            <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"#}
+{#                                                                                     href="{% url 'blog:create_post' %}">Написать пост</a></button>#}
+                            <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset">{{ app.user.firstName }}</a></button>
+                            <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                                                                                     href="{{ path('app_logout') }}">Выйти</a></button>
+                        </div>
+                    {% else %}
+                        <div class="btn-group" role="group" aria-label="Basic outlined example">
+                            <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                                                                                     href="{{ path('app_login') }}">Войти</a></button>
+                            <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                                                                                     href="{{ path('app_register') }}">Регистрация</a></button>
+                        </div>
+                    {% endif %}
+                </ul>
+{#            {% endwith %}#}
+        </div>
+    </nav>
+</header>
