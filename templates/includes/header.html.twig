@@ -17,10 +17,12 @@
                             Правила
                         </a>
                     </li>
+
                     {% if app.user %}
                         <div class="btn-group" role="group" aria-label="Basic outlined example">
-{#                            <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"#}
-{#                                                                                     href="{% url 'blog:create_post' %}">Написать пост</a></button>#}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset" href="{{ path('app_post_create') }}">Написать пост</a></button>
+                            {% endif %}
                             <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset">{{ app.user.firstName }}</a></button>
                             <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
                                                                                      href="{{ path('app_logout') }}">Выйти</a></button>

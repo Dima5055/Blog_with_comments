@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Создать пост{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="mb-4">Написать новый пост</h1>
+
+        {{ form_start(form) }}
+        <div class="mb-3">
+            {{ form_label(form.title, 'Заголовок') }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.text, 'Текст поста') }}
+            {{ form_widget(form.text, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.imageFile, 'Изображение') }}
+            {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+            <small class="form-text text-muted">
+                Необязательное поле. Допустимые форматы: JPEG, PNG, GIF. Максимальный размер: 2MB.
+            </small>
+            {{ form_errors(form.imageFile) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Опубликовать</button>
+        <a href="{{ path('app_main') }}" class="btn btn-outline-secondary">Отмена</a>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

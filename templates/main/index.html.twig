@@ -3,6 +3,67 @@
 {% block title %}Главная страница{% endblock %}
 
 {% block body %}
+    {% for post in posts %}
+        <div class="card mb-4">
+            {% if post.image %}
+                <img src="{{ asset('uploads/posts/' ~ post.image) }}"
+                     class="card-img-top"
+                     alt="{{ post.title }}"
+                     style="max-height: 400px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <h2 class="card-title">{{ post.title }}</h2>
+                <div class="card-text">
+                    {% if post.text|length > 300 %}
+                        {{ post.text|slice(0, 300) ~ '...' }}
+                        <div class="mt-2">
+                            <a href="{{ path('post_detail', {'id': post.id}) }}"
+                               class="link-primary text-decoration-none fw-medium">
+                                Читать далее <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        {{ post.text }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                    Опубликовано {{ post.publicationDate|date('d.m.Y H:i') }}
+                </small>
 
+                <!-- Группа элементов справа -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Комментарии -->
+                    <div>
+                        <a href="{{ path('post_detail', {'id': post.id}) }}#comments"
+                           class="text-decoration-none">
+                            <i class="bi bi-chat-left-text me-1"></i>
+                            Комментарии: {{ post.comments|length }}
+                        </a>
+                    </div>
 
+                    <!-- Лайки -->
+                    <div class="d-flex align-items-center">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a href="{{ path('app_like', {'id': post.id}) }}"
+                               class="text-decoration-none text-dark">
+                                <i class="bi {{ post.isLikedByUser(app.user) ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
+                                <span class="ms-1">{{ post.likes|length }}</span>
+                            </a>
+                        {% else %}
+                            <span class="text-muted">
+                                <i class="bi bi-heart"></i>
+                                <span class="ms-1">{{ post.likes|length }}</span>
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Пока нет ни одного поста!
+        </div>
+    {% endfor %}
 {% endblock %}

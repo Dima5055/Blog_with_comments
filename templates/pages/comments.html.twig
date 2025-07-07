@@ -1,0 +1,43 @@
+<div class="card mb-3" style="margin-left: {{ depth * 30 }}px">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <h6 class="card-title">{{ comment.author.firstName }} {{ comment.author.lastName }}</h6>
+            <small class="text-muted">{{ comment.createdAt|date('d.m.Y H:i') }}</small>
+        </div>
+
+        <p class="card-text">{{ comment.text }}</p>
+
+        <div class="d-flex justify-content-between">
+            {% if depth < 3 and not comment.isDeleted %}
+                <a href="{{ path('post_detail', {'id': post.id, 'reply_to': comment.id}) }}"
+                   class="btn btn-sm btn-outline-primary">
+                    Ответить
+                </a>
+            {% endif %}
+{#            {% if depth < 3 %}#}
+{#                <button class="btn btn-sm btn-outline-primary reply-button"#}
+{#                        data-comment-id="{{ comment.id }}">#}
+{#                    Ответить#}
+{#                </button>#}
+{#            {% endif %}#}
+        </div>
+
+        <!-- Форма ответа (скрыта по умолчанию) -->
+        <div class="reply-form mt-3" id="reply-form-{{ comment.id }}" style="{{ replyTo == comment.id ? '' : 'display: none' }}">
+            <form action="{{ path('post_detail', {'id': post.id}) }}" method="post">
+                <textarea name="text" class="form-control mb-2" rows="2" required></textarea>
+                <input type="hidden" name="parent" value="{{ comment.id }}">
+                <button class="btn btn-primary btn-sm">Отправить ответ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Вложенные комментарии -->
+    {% for reply in comment.replies %}
+        {% include 'pages/comments.html.twig' with {
+            'comment': reply,
+            'post': post,
+            'depth': depth + 1
+        } %}
+    {% endfor %}
+</div>
